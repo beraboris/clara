@@ -5,3 +5,6 @@
 # vim files
 *~
 .*.sw[op]
+
+# gem build
+*.gem
