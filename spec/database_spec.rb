@@ -2,7 +2,21 @@ require 'rspec'
 require 'sqlite3'
 require 'clara'
 
+module DBHelper
+  def each_table_from_sqlite_master
+    SQLite3::Database.new DB_NAME do |db|
+      q = db.prepare "SELECT * FROM sqlite_master WHERE type='table' AND name=?;"
+      TABLES.each do |table|
+        yield q.execute(table).next
+      end
+      q.close
+    end
+  end
+end
+
 describe 'Database' do
+  include DBHelper
+
   before :all do
     # set the db name
     DB_NAME = 'clara_test_db.sqlite'
@@ -48,28 +62,14 @@ describe 'Database' do
     end
 
     # check if the tables exist
-    SQLite3::Database.new DB_NAME do |db|
-      q = db.prepare "SELECT * FROM sqlite_master WHERE type='table' AND name=?;"
-      TABLES.each do |table|
-        res = q.execute table
-        res.next.should_not be_nil
-      end
-      q.close
-    end
+    each_table_from_sqlite_master { |t| t.should_not be_nil }
   end
 
   it 'drops the database schema', clean_db: true do
     @db.drop_schema
 
     # check if the tables exist
-    SQLite3::Database.new DB_NAME do |db|
-      q = db.prepare "SELECT * FROM sqlite_master WHERE type='table' AND name=?;"
-      TABLES.each do |table|
-        res = q.execute table
-        res.next.should be_nil
-      end
-      q.close
-    end
+    each_table_from_sqlite_master { |t| t.should be_nil }
   end
 
 end
