@@ -8,5 +8,8 @@ Gem::Specification.new do |s|
   s.description   = 'A tool for packaging and deploying configuration files.'
   s.authors       = ['Boris Bera']
   s.email         = ['bboris@rsoft.ca']
-  s.files         = Dir['{lib}/**/*.rb']
+  s.files         = Dir['{lib}/**/*.rb', '{sql}/**/*.sql', 'Rakefile']
+  s.test_files    = Dir['{test}/**/*.rb']
+
+  s.add_dependency 'sqlite3', '~> 1.3.7'
 end

@@ -1,5 +1,2 @@
 require 'clara/version'
-
-module Clara
-
-end
+require 'clara/database'

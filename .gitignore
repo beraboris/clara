@@ -8,3 +8,6 @@
 
 # gem build
 *.gem
+
+# sqlite files
+*.sqlite
