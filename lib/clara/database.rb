@@ -29,7 +29,7 @@ module Clara
 
     def exec_file(file)
       @db.transaction do |db|
-        db.execute_batch File.read file
+        db.execute_batch File.read(file)
       end
     end
   end
