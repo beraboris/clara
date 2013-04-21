@@ -9,7 +9,9 @@ Gem::Specification.new do |s|
   s.authors       = ['Boris Bera']
   s.email         = ['bboris@rsoft.ca']
   s.files         = Dir['{lib}/**/*.rb', '{sql}/**/*.sql', 'Rakefile']
-  s.test_files    = Dir['{test}/**/*.rb']
+  s.test_files    = Dir['{spec}/**/*.rb']
 
   s.add_dependency 'sqlite3', '~> 1.3.7'
+
+  s.add_development_dependency 'rspec', '~> 2.13.0'
 end
