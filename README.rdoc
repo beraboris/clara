@@ -1,0 +1,6 @@
+= Description
+
+Clara is a pacakge manager for your config files. Well, that's the plan.
+This project just started. The plan is for this package to be a great tool
+to allow people to deploy systems to their liking in no time without the
+hassle of copying config files around.
