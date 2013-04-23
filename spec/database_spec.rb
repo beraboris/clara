@@ -7,7 +7,7 @@ module DBHelper
     SQLite3::Database.new DB_NAME do |db|
       q = db.prepare "SELECT * FROM sqlite_master WHERE type='table' AND name=?;"
       TABLES.each do |table|
-        yield q.execute(table).next
+        yield q.execute(table).any?
       end
       q.close
     end
@@ -46,7 +46,7 @@ describe 'Database' do
 
   after :each, clean_db: true do
     # Aint nobody got time for that!
-    @db.close
+    @db.close unless @db.closed?
   end
 
   it 'creates a database' do
@@ -62,14 +62,38 @@ describe 'Database' do
     end
 
     # check if the tables exist
-    each_table_from_sqlite_master { |t| t.should_not be_nil }
+    each_table_from_sqlite_master { |t| t.should be_true }
   end
 
   it 'drops the database schema', clean_db: true do
     @db.drop_schema
 
     # check if the tables exist
-    each_table_from_sqlite_master { |t| t.should be_nil }
+    each_table_from_sqlite_master { |t| t.should be_false }
+  end
+
+  it 'inserts packages', clean_db: true do
+    package_id = @db.insert_package 'package', 'bundle', '0.0.0', 'author'
+
+    # prevent conflict
+    @db.close
+
+    # check if it's in the db
+    db = SQLite3::Database.new DB_NAME
+    db.results_as_hash = true
+    rows = db.execute('SELECT * FROM packages WHERE id=?', package_id)
+
+    # we should get something back
+    rows.any?.should be_true
+
+    # the first row should contain the data we gave it
+    rows.first['name'].should == 'package'
+    rows.first['bundle'].should == 'bundle'
+    rows.first['version'].should == '0.0.0'
+    rows.first['author'].should == 'author'
+
+    # cleanup
+    db.close
   end
 
 end

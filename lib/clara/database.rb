@@ -12,6 +12,23 @@ module Clara
       end
     end
 
+    def insert_package(name, bundle, version, author)
+      # prepare statement if needed
+      if @insert_package.nil?
+        @insert_package = @db.prepare <<-SQL
+          insert into packages(name, bundle, version, author)
+          values (:name, :bundle, :version, :author);
+        SQL
+      end
+
+      package_id = nil
+      @db.transaction do |db|
+        @insert_package.execute(name: name, bundle: bundle, version: version, author: author)
+        package_id = db.last_insert_row_id
+      end
+      package_id
+    end
+
     # Create the schema for the DB
     def create_schema
       exec_file File.expand_path '../../../sql/create_package_db.sql', __FILE__
@@ -22,7 +39,14 @@ module Clara
     end
 
     def close
+      # close all prepared statements
+      @insert_package.close unless @insert_package.nil?
+
       @db.close
+    end
+
+    def closed?
+      @db.closed?
     end
 
     private
