@@ -7,7 +7,7 @@ create table if not exists packages (
   author text,
   installed_on datetime not null default CURRENT_TIMESTAMP
 );
-create index packages_name_index on packages(name);
+create index if not exists packages_name_index on packages(name);
 
 -- Files table
 create table if not exists files (
