@@ -4,6 +4,7 @@ module Clara
   class Database
     def initialize(db_file)
       @db = SQLite3::Database.new db_file
+      @db.results_as_hash = true
 
       # self closing block
       if block_given?
@@ -29,6 +30,16 @@ module Clara
       package_id
     end
 
+    def fetch_package(id)
+      if @fetch_package.nil?
+        @fetch_package = @db.prepare <<-SQL
+          select * from packages where id=?
+        SQL
+      end
+
+      @fetch_package.execute(id).next_hash
+    end
+
     # Create the schema for the DB
     def create_schema
       exec_file File.expand_path '../../../sql/create_package_db.sql', __FILE__
@@ -40,7 +51,10 @@ module Clara
 
     def close
       # close all prepared statements
-      @insert_package.close unless @insert_package.nil?
+      [
+        :@insert_package,
+        :@fetch_package
+      ].each {|s| instance_variable_get(s).close if instance_variable_defined? s}
 
       @db.close
     end

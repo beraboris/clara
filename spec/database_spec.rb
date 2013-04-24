@@ -49,6 +49,18 @@ describe 'Database' do
     @db.close unless @db.closed?
   end
 
+  before :each, pkg_data: true do
+    @package_fixtures = [
+        {name: 'pkg_001', bundle: 'home', author: 'John Smith', version: '1.0.2'},
+        {name: 'pkg_002', bundle: 'home', author: 'John Smith', version: '1.0.3'},
+        {name: 'pkg_003', bundle: 'home', author: 'Johny',      version: '1.0.4'},
+        {name: 'pkg_001', bundle: 'work', author: 'John Smith', version: '1.0.5'},
+        {name: 'pkg_002', bundle: 'work', author: 'John Smith', version: '1.0.6'}
+    ]
+
+    @package_fixtures.each { |f| @db.insert_package f[:name], f[:bundle], f[:version], f[:author] }
+  end
+
   it 'creates a database' do
     db = Clara::Database.new DB_NAME
     db.close
@@ -96,4 +108,14 @@ describe 'Database' do
     db.close
   end
 
+  it 'fetches packages', clean_db: true, pkg_data: true do
+    # fetch all inserted fixtures, see if they match
+    @package_fixtures.each_with_index do |f, i|
+      package_hash = @db.fetch_package i+1
+      package_hash.should_not be_nil
+      f.each do |k, v|
+        package_hash[k.to_s].should == v
+      end
+    end
+  end
 end
