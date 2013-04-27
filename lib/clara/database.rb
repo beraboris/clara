@@ -40,6 +40,24 @@ module Clara
       @fetch_package.execute(id).next_hash
     end
 
+    def update_package(id, name, bundle, version, author)
+      # prepared statement if needed
+      if @update_package.nil?
+        @update_package = @db.prepare <<-SQL
+          update packages set
+            name = :name,
+            bundle = :bundle,
+            version = :version,
+            author = :author
+          where id = :id
+        SQL
+      end
+
+      @db.transaction do
+        @update_package.execute id: id, name: name, bundle: bundle, version: version, author: author
+      end
+    end
+
     # Create the schema for the DB
     def create_schema
       exec_file File.expand_path '../../../sql/create_package_db.sql', __FILE__
@@ -53,7 +71,8 @@ module Clara
       # close all prepared statements
       [
         :@insert_package,
-        :@fetch_package
+        :@fetch_package,
+        :@update_package
       ].each {|s| instance_variable_get(s).close if instance_variable_defined? s}
 
       @db.close

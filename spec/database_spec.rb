@@ -118,4 +118,21 @@ describe 'Database' do
       end
     end
   end
+
+  it 'updates packages', clean_db: true, pkg_data: true do
+    # update packages
+    @package_fixtures.each_with_index do |fixture, index|
+      # Add _changed to all fields
+      changed = {}
+      fixture.each {|k,v| changed[k] = v+'_changed'}
+      @db.update_package index+1, changed[:name], changed[:bundle], changed[:version], changed[:author]
+    end
+
+    @package_fixtures.each_with_index do |fixture, index|
+      res = @db.fetch_package index+1
+      fixture.each do |k, v|
+        res[k.to_s].should == v+'_changed'
+      end
+    end
+  end
 end
