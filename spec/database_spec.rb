@@ -119,6 +119,14 @@ describe 'Database' do
     end
   end
 
+  it 'checks existence of a package', clean_db: true, pkg_data: true  do
+    # package should exist
+    @db.package_exists(1).should be_true
+
+    # package shouldn't exist
+    @db.package_exists(9999).should be_false
+  end
+
   it 'updates packages', clean_db: true, pkg_data: true do
     # update packages
     @package_fixtures.each_with_index do |fixture, index|
@@ -135,4 +143,5 @@ describe 'Database' do
       end
     end
   end
+
 end

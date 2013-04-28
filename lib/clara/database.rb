@@ -40,6 +40,10 @@ module Clara
       @fetch_package.execute(id).next_hash
     end
 
+    def package_exists(id)
+      not fetch_package(id).nil?
+    end
+
     def update_package(id, name, bundle, version, author)
       # prepared statement if needed
       if @update_package.nil?
