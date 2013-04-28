@@ -128,12 +128,14 @@ describe 'Database' do
   end
 
   it 'updates packages', clean_db: true, pkg_data: true do
+    new_time = Time.now + 3
+
     # update packages
     @package_fixtures.each_with_index do |fixture, index|
       # Add _changed to all fields
       changed = {}
       fixture.each {|k,v| changed[k] = v+'_changed'}
-      @db.update_package index+1, changed[:name], changed[:bundle], changed[:version], changed[:author]
+      @db.update_package index+1, changed[:name], changed[:bundle], changed[:version], changed[:author], new_time
     end
 
     @package_fixtures.each_with_index do |fixture, index|
@@ -141,6 +143,8 @@ describe 'Database' do
       fixture.each do |k, v|
         res[k.to_s].should == v+'_changed'
       end
+      # Compare to the second, fractional seconds are lost in db
+      res['installed_on'].to_i.should == new_time.to_i
     end
   end
 

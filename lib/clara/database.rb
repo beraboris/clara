@@ -33,18 +33,21 @@ module Clara
     def fetch_package(id)
       if @fetch_package.nil?
         @fetch_package = @db.prepare <<-SQL
-          select * from packages where id=?
+          select id, name, bundle, version, author, strftime('%s',installed_on) as installed_on
+          from packages where id=?
         SQL
       end
 
-      @fetch_package.execute(id).next_hash
+      res = @fetch_package.execute(id).next_hash
+      res['installed_on'] = Time.at(res['installed_on'].to_i) unless res.nil?
+      res
     end
 
     def package_exists(id)
       not fetch_package(id).nil?
     end
 
-    def update_package(id, name, bundle, version, author)
+    def update_package(id, name, bundle, version, author, installed_on)
       # prepared statement if needed
       if @update_package.nil?
         @update_package = @db.prepare <<-SQL
@@ -52,13 +55,15 @@ module Clara
             name = :name,
             bundle = :bundle,
             version = :version,
-            author = :author
+            author = :author,
+            installed_on = datetime(:installed_on, 'unixepoch')
           where id = :id
         SQL
       end
 
       @db.transaction do
-        @update_package.execute id: id, name: name, bundle: bundle, version: version, author: author
+        @update_package.execute id: id, name: name, bundle: bundle, version: version,
+                                author: author, installed_on: installed_on.to_i
       end
     end
 
