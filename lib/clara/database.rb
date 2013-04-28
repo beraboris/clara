@@ -62,6 +62,16 @@ module Clara
       end
     end
 
+    def delete_package(id)
+      if @delete_package.nil?
+        @delete_package = @db.prepare <<-SQL
+          delete from packages where id=?;
+        SQL
+      end
+
+      @db.transaction { @delete_package.execute id }
+    end
+
     # Create the schema for the DB
     def create_schema
       exec_file File.expand_path '../../../sql/create_package_db.sql', __FILE__
@@ -76,7 +86,8 @@ module Clara
       [
         :@insert_package,
         :@fetch_package,
-        :@update_package
+        :@update_package,
+        :@delete_package
       ].each {|s| instance_variable_get(s).close if instance_variable_defined? s}
 
       @db.close

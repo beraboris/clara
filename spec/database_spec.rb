@@ -144,4 +144,10 @@ describe 'Database' do
     end
   end
 
+  it 'deletes packages', clean_db: true, pkg_data: true do
+    @db.package_exists(1).should be_true
+    @db.delete_package(1)
+    @db.package_exists(1).should be_false
+  end
+
 end
