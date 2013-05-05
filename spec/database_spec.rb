@@ -54,7 +54,6 @@ describe 'Database' do
         {name: 'pkg_001', bundle: 'home', author: 'John Smith', version: '1.0.2'},
         {name: 'pkg_002', bundle: 'home', author: 'John Smith', version: '1.0.3'},
         {name: 'pkg_003', bundle: 'home', author: 'Johny',      version: '1.0.4'},
-        {name: 'pkg_001', bundle: 'work', author: 'John Smith', version: '1.0.5'},
         {name: 'pkg_002', bundle: 'work', author: 'John Smith', version: '1.0.6'}
     ]
 
@@ -109,19 +108,16 @@ describe 'Database' do
   end
 
   it 'fetches packages', clean_db: true, pkg_data: true do
-    # fetch all inserted fixtures, see if they match
-    @package_fixtures.each_with_index do |f, i|
-      package_hash = @db.fetch_package i+1
-      package_hash.should_not be_nil
-      f.each do |k, v|
-        package_hash[k.to_s].should == v
-      end
+    package_hash = @db.fetch_package 1
+    package_hash.should_not be_nil
+    @package_fixtures[0].each do |k, v|
+      package_hash[k.to_s].should == v
     end
   end
 
   it 'checks existence of a package', clean_db: true, pkg_data: true  do
     # package should exist
-    @db.package_exists(1).should be_true
+    @db.package_exists(2).should be_true
 
     # package shouldn't exist
     @db.package_exists(9999).should be_false
@@ -130,28 +126,24 @@ describe 'Database' do
   it 'updates packages', clean_db: true, pkg_data: true do
     new_time = Time.now + 3
 
-    # update packages
-    @package_fixtures.each_with_index do |fixture, index|
-      # Add _changed to all fields
-      changed = {}
-      fixture.each {|k,v| changed[k] = v+'_changed'}
-      @db.update_package index+1, changed[:name], changed[:bundle], changed[:version], changed[:author], new_time
-    end
+    # update package
+    changed = {}
+    @package_fixtures[2].each {|k,v| changed[k] = v+'_changed'}
+    @db.update_package 3, changed[:name], changed[:bundle], changed[:version], changed[:author], new_time
 
-    @package_fixtures.each_with_index do |fixture, index|
-      res = @db.fetch_package index+1
-      fixture.each do |k, v|
-        res[k.to_s].should == v+'_changed'
-      end
-      # Compare to the second, fractional seconds are lost in db
-      res['installed_on'].to_i.should == new_time.to_i
+    # fetch updated package
+    res = @db.fetch_package 3
+    @package_fixtures[2].each do |k, v|
+      res[k.to_s].should == v+'_changed'
     end
+    # Compare to the second, fractional seconds are lost in db
+    res['installed_on'].to_i.should == new_time.to_i
   end
 
   it 'deletes packages', clean_db: true, pkg_data: true do
-    @db.package_exists(1).should be_true
-    @db.delete_package(1)
-    @db.package_exists(1).should be_false
+    @db.package_exists(4).should be_true
+    @db.delete_package(4)
+    @db.package_exists(4).should be_false
   end
 
 end
