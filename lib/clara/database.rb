@@ -1,7 +1,14 @@
 require 'sqlite3'
 
 module Clara
+  ##
+  # Handles all database interactions.
   class Database
+
+    ##
+    # Opens the sqlite db found at the +db_file+ path, if the db doesn't exist, a new one will be created
+    #
+    # if a block is provided, the block will be executed and the db will be closed at the end of the block
     def initialize(db_file)
       @db = SQLite3::Database.new db_file
       @db.results_as_hash = true
@@ -13,6 +20,13 @@ module Clara
       end
     end
 
+    ##
+    # Stores a package to the database
+    #
+    # +name+, +bundle+, +version+, and +author+ are all strings
+    # the timestamp is also automatically inserted (default value in SQL)
+    #
+    # @return the id of the inserted row
     def insert_package(name, bundle, version, author)
       # prepare statement if needed
       if @insert_package.nil?
@@ -30,6 +44,8 @@ module Clara
       package_id
     end
 
+    ##
+    # @return a row for the package as a hash. The keys of the hash are strings and not symbols (I blame SQLite3)
     def fetch_package(id)
       if @fetch_package.nil?
         @fetch_package = @db.prepare <<-SQL
@@ -43,10 +59,17 @@ module Clara
       res
     end
 
+    ##
+    # Checks whether or not a package is present in the DB
+    # @return true if present, false otherwise
     def package_exists(id)
       not fetch_package(id).nil?
     end
 
+    ##
+    # Updates the package in the db with the matching +id+
+    #
+    # <em>All fields are required. the whole row is updated at once</em>
     def update_package(id, name, bundle, version, author, installed_on)
       # prepared statement if needed
       if @update_package.nil?
@@ -67,6 +90,7 @@ module Clara
       end
     end
 
+    # deletes a package with the matching +id+
     def delete_package(id)
       if @delete_package.nil?
         @delete_package = @db.prepare <<-SQL
@@ -77,15 +101,23 @@ module Clara
       @db.transaction { @delete_package.execute id }
     end
 
-    # Create the schema for the DB
+    ##
+    # Create the schema of the DB
+    #
+    # This method reads the file sql/create_package_db.sql and executes it
     def create_schema
       exec_file File.expand_path '../../../sql/create_package_db.sql', __FILE__
     end
 
+    ##
+    # Drops the schema of the DB
+    #
+    # This method reads the file sql/drop_package_db.sql and executes it
     def drop_schema
       exec_file File.expand_path '../../../sql/drop_package_db.sql', __FILE__
     end
 
+    # close the db connection
     def close
       # close all prepared statements
       [
