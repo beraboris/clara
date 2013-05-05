@@ -16,7 +16,7 @@ module Clara
     # The
     def self.create(path)
       @@handlers.each do |handler|
-        handler.new path if handler.handles? path
+        return handler.new path if handler.handles? path
       end
 
       raise Clara::UnsupportedPackageTypeError.new "Could not find handler for #{path}"
