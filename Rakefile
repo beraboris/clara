@@ -1,4 +1,5 @@
 require 'rspec/core/rake_task'
+require 'rdoc/task'
 
 RSpec::Core::RakeTask.new('spec')
 
@@ -20,4 +21,11 @@ task :console do
     ARGV.clear
     IRB.start
   end
+end
+
+desc "Generate documentation"
+RDoc::Task.new do |rdoc|
+  rdoc.main = "README.rdoc"
+  rdoc.rdoc_files.include("README.rdoc", "lib/**/*.rb")
+  rdoc.rdoc_dir = "doc"
 end
