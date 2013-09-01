@@ -10,8 +10,6 @@ module Clara
 
     ##
     # Create a package storage
-    #
-    # The
     def self.create(path)
       @@handlers.each do |handler|
         return handler.new path if handler.handles? path
