@@ -1,10 +1,11 @@
+require 'clara/script/environment'
+
 module Clara
   module Script
     ##
     # Runs scripts
     class Runner
-      def initialize(work_tree, script_path)
-        @work_tree = work_tree
+      def initialize(script_path)
         @script_path = script_path
       end
 
@@ -20,14 +21,13 @@ module Clara
       ##
       # Setup the environment to run the script
       def setup_env
-
+        @env = Clara::Script::Environment.new
       end
 
       ##
       # Runs the script
       def run_script
-        Dir.chdir @work_tree
-        load @script_path
+        @env.run @script_path
       end
     end
   end
