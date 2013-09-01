@@ -1,5 +1,3 @@
-require 'clara/utils/abstract'
-
 module Clara
   ##
   # Factory for creating Package storage handlers
@@ -35,36 +33,10 @@ module Clara
     #
     # Classes that inherit this class will handle a certain type of package. e.g. Compressed, remote, etc.
     class Base
-      extend Clara::Utils::Abstract
-
       # register as a handler when inherited
       def self.inherited(subclass)
         Clara::PackageStorage.add_package_storage_handler subclass
       end
-
-      ##
-      # Opens the package
-      abstract_method :open
-
-      ##
-      # returns a File object for the install script
-      abstract_method :install_script
-
-      ##
-      # returns the package information
-      abstract_method :information
-
-      ##
-      # returns the path where the files to be installed are located
-      abstract_method :files
-
-      ##
-      # :singleton-method: handles?
-      # :arg: path
-      # Method that determines whether or not this handler should handle the +path+ given
-      #
-      # if the method returns true, its class will be used to handle the package
-      abstract_class_methods :handles?
     end
   end
 
