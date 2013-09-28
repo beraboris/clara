@@ -8,9 +8,11 @@ Gem::Specification.new do |s|
   s.description   = 'A command line tool that allows you to manage configuration files as if they were packages.'
   s.authors       = ['Boris Bera']
   s.email         = ['bboris@rsoft.ca']
-  s.files         = Dir['{lib}/**/*.rb', '{sql}/**/*.sql', 'Rakefile']
+  s.files         = Dir['{lib}/**/*.rb', 'Rakefile']
   s.test_files    = Dir['{spec}/**/*.rb']
 
   s.add_development_dependency 'rspec'
+  s.add_development_dependency 'rake'
+  s.add_development_dependency 'rdoc'
   s.add_development_dependency 'bundler'
 end
