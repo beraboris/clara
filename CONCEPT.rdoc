@@ -1,0 +1,67 @@
+= The problem
+
+I always find myself having to copy files from one machine to another. This happens quite a lot for any number of
+reasons. Whenever I install these config files I always end up screwing something up. Problems with config files come
+in all shapes and sizes. Here are a few examples:
+
+- using an old version
+- config has system specific settings
+- forgetting to install a config
+- forgetting a file
+- excess functionality
+- etc.
+
+The fact of the matter is that installing config files can easily become a pain. Everytime I install a config I end up
+having to crack open vim, because something isn't quite right.
+
+= The goal
+
+I want a utility that will allow me to install, uninstall, update and sync my config files without hassle. I want a
+standard way of scripting config file installation. I want to be able to select which parts of a config I need. I want
+to select the parameters of some settings.
+
+== Features
+
+What follows is a list of specific features for clara. Consider this some kind of a wishlist.
+
+=== handle configuration files like packages
+
+A config file or a set of config files should be considered a package. They can be installed, uninstalled and updated.
+A package to contain all the information needed to assemble a set of config files and install them on a system. In the
+same maner, a package should contain all the information needed to get rid of a set of configs.
+
+Clara should act like any package manager. It needs to be able to install, uninstall and update package. It also needs
+to keep track of said packages. Anything that apt, yum, or pacman can do should be doable with clara.
+
+=== templated config files
+
+We should be able to generelize config files so that they can bring the same configuration in different environment.
+
+Take the following example:
+
+I have a config file for an unnamed application, this config file requies my external ip address to do some cool thing.
+To install this config file, I need to look up my external ip address and set it manually.
+
+Wouldn't it be great to be able to do something like:
+
+  # Configuration file for some cool application
+  EXTERNAL_IP = <%= call_remote_service_and_get_external_ip %>
+
+Here's another example:
+
+Suppose you have configured your desktop environment to start your wireless network manager in a specific way. Now
+suppose that you're installin this config on a machine with no wifi card.
+
+Instead of having to remove a bit of the config, wouldn't it be nicer to do something like:
+
+  <% if wants :wifi_magic %>
+    # that awesome bit of wifi config
+    # . . .
+  <% end %>
+
+Or even:
+
+  <%= comment_unless wants :wifi_magic do %>
+    # that awesome bit of wifi config
+    # . . .
+  <% end %>
