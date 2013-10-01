@@ -1,6 +1,7 @@
 require 'rake'
 
 module Clara
+  # An environment used to run rake tasks
   class RakeEnv < Rake::Application
     def initialize(work_dir)
       super()
