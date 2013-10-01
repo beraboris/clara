@@ -65,3 +65,17 @@ Or even:
     # that awesome bit of wifi config
     # . . .
   <% end %>
+
+=== non-centralized repositories
+
+Having a centralized repository of config files makes no sence. Everyone has their own set of configurations that they
+like. Instead of having a few massive repos filled with config packages, users should maintain and share their own
+repositories.
+
+These repos can be hosted anywhere the users want. They can be private, or they can be open to the public at large. The
+protocols used to talk to the repos (HTTP, FTP, SMB, etc.) don't really matter. One good platform for repos would be
+github. It would be the equivalent of the dotfiles repos found all over github. Instead of just containing only holding
+config files, they would hold instructions for clara on how to install these configs.
+
+If I find a nice config file on github, I can add the git repo to my list of repositories and then install the config
+package with clara.
