@@ -25,7 +25,7 @@ describe Clara::RakeEnv do
     end
 
     it 'should find that task' do
-      @env[:my_task].should_not be_nil
+      @env.lookup(:my_task).should_not be_nil
     end
 
     it 'should be able to run that task' do
@@ -35,7 +35,7 @@ describe Clara::RakeEnv do
 
   describe 'it does not have a task' do
     it 'should fail to find it' do
-      lambda { @env[:my_task] }.should raise_exception
+      @env.lookup(:my_task).should be_nil
     end
 
     it 'should throw an exception when it runs it' do
