@@ -1,24 +1,24 @@
-require File.expand_path '../lib/clara/version', __FILE__
+# coding: utf-8
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require 'clara/version'
 
 Gem::Specification.new do |s|
   s.name          = 'clara'
   s.version       = Clara::VERSION
-  s.date          = '2013-09-28'
-  s.summary       = 'A package manager for your config file'
-  s.description   = 'A command line tool that allows you to manage configuration files as if they were packages.'
   s.authors       = ['Boris Bera']
   s.email         = %w(bboris@rsoft.ca)
+  s.summary       = 'A package manager for your config files'
+  s.description   = 'A command line tool that allows you to manage configuration files as if they were packages.'
+  s.homepage      = 'https://github.com/beraboris/clara'
+  s.license       = 'MIT'
 
-  # files
-  s.files         = Dir['{lib}/**/*.rb']
-  s.test_files    = Dir['{spec}/**/*.rb']
-  s.extra_rdoc_files = Dir['*.md']
+  s.files         = `git ls-files -z`.split("\x0")
+  s.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
+  s.test_files    = spec.files.grep(%r{^(test|spec|features)/})
+  s.require_paths = ['lib']
 
-  # rdoc config
-  s.rdoc_options << '--main' << 'README.md'
-
-  # dependencies
   s.add_development_dependency 'rspec', '~> 2.13'
   s.add_development_dependency 'rake', '~> 10.1'
-  s.add_development_dependency 'bundler'
+  s.add_development_dependency 'bundler', '~> 1.7'
 end
