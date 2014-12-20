@@ -9,4 +9,4 @@ Disclaimer
 ==========
 
 Currently, clara is in very early development. As of writing this readme, it is mostly a concept. For more information
-on the concept of clara, please see CONCEPT
+on the concept of clara, please see [CONCEPT.md](CONCEPT.md)

@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   # files
   s.files         = Dir['{lib}/**/*.rb']
   s.test_files    = Dir['{spec}/**/*.rb']
-  s.extra_rdoc_files = Dir['*.rdoc']
+  s.extra_rdoc_files = Dir['*.md']
 
   # rdoc config
   s.rdoc_options << '--main' << 'README.md'
