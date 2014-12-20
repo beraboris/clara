@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files = Dir['*.rdoc']
 
   # rdoc config
-  s.rdoc_options << '--main' << 'README.rdoc'
+  s.rdoc_options << '--main' << 'README.md'
 
   # dependencies
   s.add_development_dependency 'rspec'
