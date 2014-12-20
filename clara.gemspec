@@ -18,8 +18,8 @@ Gem::Specification.new do |s|
   s.rdoc_options << '--main' << 'README.md'
 
   # dependencies
-  s.add_development_dependency 'rspec'
-  s.add_development_dependency 'rake'
+  s.add_development_dependency 'rspec', '~> 2.13'
+  s.add_development_dependency 'rake', '~> 10.1'
   s.add_development_dependency 'rdoc'
   s.add_development_dependency 'bundler'
 end
