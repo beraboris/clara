@@ -49,8 +49,8 @@ To install this config file, I need to look up my external ip address and set it
 
 Wouldn't it be great to be able to do something like:
 
-  # Configuration file for some cool application
-  EXTERNAL_IP = <%= call_remote_service_and_get_external_ip %>
+    # Configuration file for some cool application
+    EXTERNAL_IP = <%= call_remote_service_and_get_external_ip %>
 
 Here's another example:
 
@@ -59,17 +59,17 @@ suppose that you're installing this config on a machine with no wifi card.
 
 Instead of having to remove a bit of the config, wouldn't it be nicer to do something like:
 
-  <% if wants :wifi_magic %>
+    <% if wants :wifi_magic %>
     # that awesome bit of wifi config
     # . . .
-  <% end %>
+    <% end %>
 
 Or even:
 
-  <%= comment_unless wants :wifi_magic do %>
+    <%= comment_unless wants :wifi_magic do %>
     # that awesome bit of wifi config
     # . . .
-  <% end %>
+    <% end %>
 
 Decentralized repositories
 --------------------------
