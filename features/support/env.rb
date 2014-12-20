@@ -1,3 +1,6 @@
+require 'coveralls'
+Coveralls.wear!
+
 require 'rspec'
 require 'fakefs/safe'
 require 'clara'
