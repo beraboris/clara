@@ -18,8 +18,12 @@ Gem::Specification.new do |s|
   s.test_files    = s.files.grep(%r{^(test|spec|features)/})
   s.require_paths = ['lib']
 
+  s.add_dependency 'boson', '~> 1.3'
+  s.add_dependency 'safe_yaml', '~> 1.0'
+
   s.add_development_dependency 'rspec', '~> 3.1'
   s.add_development_dependency 'cucumber', '~> 1.3'
   s.add_development_dependency 'rake', '~> 10.4'
   s.add_development_dependency 'bundler', '~> 1.7'
+  s.add_development_dependency 'fakefs', '~> 0.6'
 end

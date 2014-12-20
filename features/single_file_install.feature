@@ -5,8 +5,8 @@ Feature: Single file installation
     Given I have a file named "/packages/thing.conf" containing
     """
     ---
-    root_destination: /etc/thing.conf
-    home_destination: ~/.thing.conf
+    system_location: /etc/thing.conf
+    user_location: ~/.thing.conf
     ---
     Hi mom
     """
@@ -20,8 +20,8 @@ Feature: Single file installation
     Given I have a file named "/packages/other_thing.conf" containing
     """
     ---
-    root_destination: /etc/other_thing.conf
-    home_destination: ~/.other_thing.conf
+    system_location: /etc/other_thing.conf
+    user_location: ~/.other_thing.conf
     ---
     Hi dad
     """
@@ -35,8 +35,8 @@ Feature: Single file installation
     Given I have a file named "/packages/that_thing.conf" containing
     """
     ---
-    root_destination: /etc/that_thing.conf
-    home_destination: ~/.that_thing.conf
+    system_location: /etc/that_thing.conf
+    user_location: ~/.that_thing.conf
     ---
     Hey there
     """
