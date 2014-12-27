@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'boson', '~> 1.3'
   s.add_dependency 'safe_yaml', '~> 1.0'
+  s.add_dependency 'erubis', '~> 2.7'
 
   s.add_development_dependency 'rspec', '~> 3.1'
   s.add_development_dependency 'cucumber', '~> 1.3'

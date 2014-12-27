@@ -1,12 +1,14 @@
 require 'boson/runner'
 require 'safe_yaml'
+require 'erubis'
 
 module Clara
   class Runner < Boson::Runner
     option :system, type: :boolean, desc: 'system wide install', default: false
     option :user, type: :boolean, desc: 'user install', default: true
     def install(package, options = {})
-      contents, package_options = extract_file_options(package)
+      raw_contents, package_options = extract_file_options(package)
+      contents = Erubis::Eruby.new(raw_contents).result
 
       location = user_install?(options) ? package_options['user_location'] : package_options['system_location']
       FileUtils.mkpath File.dirname(location)
