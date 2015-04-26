@@ -1,70 +1,45 @@
 require 'clara'
+require 'clara/file_package'
 require 'support/run'
 require 'support/packages'
 
 describe 'Single file install' do
-  include FakeFS::SpecHelpers
-
   let(:packages) { Pathname.new '/packages' }
+  let(:package) { double 'package' }
 
-  it 'should install as root' do
+  before do
+    allow(Clara::FilePackage).to receive(:new).and_return package
+  end
+
+  it 'should load the package file' do
+    source = packages + 'butts.cfg'
+    expect(Clara::FilePackage).to receive(:new).with source
+    allow(package).to receive(:install!).with(anything)
+
+    run_clara 'install', source.to_s
+  end
+
+  it 'should install for system' do
     source = packages + 'something.conf'
-    destination = Pathname.new '/etc/something.conf'
 
-    make_file_package source, 'Stuff',
-                      system_location: '/etc/something.conf'
+    expect(package).to receive(:install!).with(false)
 
     run_clara 'install', source.to_s, '--system'
-
-    expect(destination).to exist
   end
 
-  it 'should install as user' do
+  it 'should install for user' do
     source = packages + 'something.conf'
-    destination = Pathname.new('~/.something.conf').expand_path
 
-    make_file_package source, 'Stuff',
-                      user_location: '~/.something.conf'
+    expect(package).to receive(:install!).with(true)
 
     run_clara 'install', source.to_s, '--user'
-
-    expect(destination).to exist
   end
 
-  it 'should default to installing as root' do
+  it 'should default to installing for user' do
     source = packages + 'something.conf'
-    destination = Pathname.new('~/.something.conf').expand_path
 
-    make_file_package source, 'Stuff',
-                      user_location: '~/.something.conf'
+    expect(package).to receive(:install!).with(true)
 
     run_clara 'install', source.to_s
-
-    expect(destination).to exist
-  end
-
-  it 'should template the file' do
-    source = packages + 'something.conf'
-    destination = Pathname.new('~/.something.conf').expand_path
-
-    make_file_package source, 'The answer is <%= 42 %>.',
-                      user_location: '~/.something.conf'
-
-    run_clara 'install', source.to_s
-
-    expect(destination).to exist
-    expect(File.read(destination).chomp).to eq 'The answer is 42.'
-  end
-
-  it 'should expand ~' do
-    source = packages + 'hello.conf'
-    home = Pathname.new('~').expand_path
-
-    make_file_package source, 'stuff',
-                      user_location: '~/hello.conf'
-
-    run_clara 'install', source.to_s, '--user'
-
-    expect(home + 'hello.conf').to exist
   end
 end
