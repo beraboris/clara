@@ -9,7 +9,8 @@ Gem::Specification.new do |s|
   s.authors       = ['Boris Bera']
   s.email         = %w(bboris@rsoft.ca)
   s.summary       = 'A package manager for your config files'
-  s.description   = 'A command line tool that allows you to manage configuration files as if they were packages.'
+  s.description   = 'A command line tool that allows you to manage' \
+                    'configuration files as if they were packages.'
   s.homepage      = 'https://github.com/beraboris/clara'
   s.license       = 'MIT'
 

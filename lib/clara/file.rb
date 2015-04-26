@@ -2,6 +2,7 @@ require 'safe_yaml'
 require 'clara/template'
 
 module Clara
+  # A file with a possible yaml header that can be turned into a template
   class File
     attr_reader :options
 
@@ -11,10 +12,9 @@ module Clara
 
     # @param [String] content the raw contents of the file
     def initialize(content)
-      match = content.match /\A---\s*\n(.*)\n---\s*\n/m
+      match = content.match(/\A---\s*\n(.*)\n---\s*\n/m)
 
       if match
-        # noinspection RubyResolve
         @options = SafeYAML.load match[1]
         @content = match.post_match
       else

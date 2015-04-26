@@ -6,8 +6,7 @@ require 'rubocop/rake_task'
 
 RSpec::Core::RakeTask.new('spec')
 Cucumber::Rake::Task.new('features')
-RuboCop::RakeTask.new 
-
+RuboCop::RakeTask.new
 
 desc 'Run all tests'
 task default: [:spec, :features, :rubocop]
