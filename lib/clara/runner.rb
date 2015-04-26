@@ -11,7 +11,7 @@ module Clara
     def install(package, options = {})
       file = Clara::File.read package
 
-      location = file.options[location_option(options)]
+      location = ::File.expand_path file.options[location_option(options)]
       FileUtils.mkpath ::File.dirname(location)
 
       ::File.write location, file.template.result
