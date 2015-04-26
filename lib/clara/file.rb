@@ -1,5 +1,6 @@
 require 'safe_yaml'
 require 'clara/template'
+require 'clara/options'
 
 module Clara
   # A file with a possible yaml header that can be turned into a template
@@ -15,10 +16,10 @@ module Clara
       match = content.match(/\A---\s*\n(.*)\n---\s*\n/m)
 
       if match
-        @options = SafeYAML.load match[1]
+        @options = Options.new(SafeYAML.load match[1])
         @content = match.post_match
       else
-        @options = {}
+        @options = Options.new({})
         @content = content
       end
     end

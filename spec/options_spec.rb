@@ -19,4 +19,16 @@ describe Clara::Options do
       expect(options.destination true).to eq '/biz/baz/stuff.conf'
     end
   end
+
+  describe '#empty?' do
+    it 'should return true if the hash is empty' do
+      options = Clara::Options.new({})
+      expect(options.empty?).to eq true
+    end
+
+    it 'should return false when we have options' do
+      options = Clara::Options.new 'foo' => 'bar'
+      expect(options.empty?).to eq false
+    end
+  end
 end

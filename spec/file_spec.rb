@@ -26,7 +26,7 @@ describe Clara::File do
     it 'should return empty options when none available' do
       file = Clara::File.new 'stuff'
 
-      expect(file.options).to eq({})
+      expect(file.options).to be_empty
     end
   end
 
