@@ -42,4 +42,12 @@ describe 'Single file install' do
 
     run_clara 'install', source.to_s
   end
+
+  it 'should display package errors to users' do
+    allow(Clara::FilePackage).to receive(:new)
+      .and_raise(Clara::PackageError, 'look at me, i am an error')
+
+    expect { run_clara 'install', '/not-there.conf' }.to \
+      output(/^look at me, i am an error$/).to_stderr
+  end
 end

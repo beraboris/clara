@@ -2,10 +2,14 @@ require 'clara/file'
 require 'pathname'
 
 module Clara
+  class PackageError < RuntimeError; end
+
   # A single file contained as a single file
   class FilePackage
     # @param path [Pathname] path of the file
     def initialize(path)
+      fail PackageError, "File not found: #{path}" unless path.exist?
+
       @file = File.read path
     end
 

@@ -11,6 +11,10 @@ module Clara
     option :user, type: :boolean, desc: 'user install', default: true
     def install(package, options = {})
       FilePackage.new(Pathname.new package).install!(user_install? options)
+
+    rescue PackageError => e
+      $stderr.puts "Failed to install #{package}"
+      $stderr.puts e.message
     end
 
     private
